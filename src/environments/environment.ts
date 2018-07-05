@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  watson: {
+    workspaceId: 'ac44799b-f7cb-414b-8cb7-ea9d4544b633'
+  }
 };
 
 /*
