@@ -1,36 +1,31 @@
 import { Injectable } from '@angular/core';
-import * as watson from 'watson-developer-cloud';
 import { environment } from '../environments/environment';
-
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Injectable()
 export class WatsonHttpService {
 
     private assistant: any;
-
-    constructor() {
-        this.assistant = new watson.AssistantV1({
-            username: environment.watson.username,
-            password: environment.watson.password,
-            version: '2018-02-16'
-        });
+    public httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa(`${environment.watson.username}:${environment.watson.password}`)
+        })
+      };
+    constructor(
+        private httpClient: HttpClient
+    ) {
     }
 
-    sendMessage(message: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            this.assistant.message({
-                workspace_id: environment.watson.workspaceId,
-                input: { 'text': message }
-            }, function (err, response) {
-                if (err) {
-                    console.log('error:', err);
-                    reject(err)
-                } else {
-                    console.log(JSON.stringify(response, null, 2));
-                    resolve(response)
-                }
-            });
-        });
-    });
 
-}
+    sendMessage(message: string): Observable<any> {
+        const data = {
+            input: {
+                text: message
+            }
+        }
+    
+       return this.httpClient.post(`https://gateway.watsonplatform.net/assistant/api/v1/workspaces/${environment.watson.workspaceId}/message?version=2018-02-16`, data, this.httpOptions);
+    }
+
 }

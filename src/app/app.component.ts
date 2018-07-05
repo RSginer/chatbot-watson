@@ -38,7 +38,7 @@ export class AppComponent implements OnInit{
 
   async sendMessage(text) {
     try {
-     const response = await this.watsonHttpService.sendMessage(text);
+     const response = await this.watsonHttpService.sendMessage(text).toPromise();
      const message = this.parseWatsonResponse(response);
      this.conversation.push(message);
     } catch (error) {
@@ -47,7 +47,7 @@ export class AppComponent implements OnInit{
   }
 
   parseWatsonResponse(response): any {
-    throw new Error('Not implemented!');
+    console.log(response);
   }
 
 }

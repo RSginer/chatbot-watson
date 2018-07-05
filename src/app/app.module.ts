@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MessengerModule } from 'ngx-messenger';
 import { WatsonHttpService } from './watson-http-service';
+import { HttpClientModule } from '@angular/common/http';
  
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { WatsonHttpService } from './watson-http-service';
   ],
   imports: [
     BrowserModule,
-    MessengerModule
+    MessengerModule,
+    HttpClientModule
   ],
   providers: [WatsonHttpService],
   bootstrap: [AppComponent]
