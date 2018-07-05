@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   watson: {
-    workspaceId: 'ac44799b-f7cb-414b-8cb7-ea9d4544b633'
+    workspaceId: 'ac44799b-f7cb-414b-8cb7-ea9d4544b633',
+    username: 'abb8d35f-6b22-465d-ad1b-24d846a4edee',
+    password: '1uGpthCBy3mD'
   }
 };
 

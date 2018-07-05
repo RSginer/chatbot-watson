@@ -36,15 +36,18 @@ export class AppComponent implements OnInit{
     
   }
 
-  sendMessage(text) {
-    this.conversation.push({
-      text: text,
-      date: new Date(),
-      user: {
-        id: this.currentUserId,
-        imageUrl: 'http://via.placeholder.com/100x100',
-        name: 'Ruben'
-      }
-    })
+  async sendMessage(text) {
+    try {
+     const response = await this.watsonHttpService.sendMessage(text);
+     const message = this.parseWatsonResponse(response);
+     this.conversation.push(message);
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  parseWatsonResponse(response): any {
+    throw new Error('Not implemented!');
+  }
+
 }
