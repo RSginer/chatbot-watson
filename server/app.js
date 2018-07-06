@@ -28,19 +28,28 @@ var workspace_id = watson.workspaceId; // replace with workspace ID
 }, processResponse);
  */
 
+ var lastResponse;
 
 
 app.post('/', function (req, res) {
   const message = req.body;
-  service.message({
+  const watsonReq = {
     workspace_id: workspace_id,
-    input: { text: message }
-  }, function (err, response) {
+    input: { text: message },
+  };
+
+  if (lastResponse) {
+    watsonReq['context'] = lastResponse.context
+  }
+
+  service.message(watsonReq, function (err, response) {
     if (err) {
-      console.error(err); // something went wrong
+ //     console.error(err); // something went wrong
       return res.send(err);
     }
-  
+    
+    lastResponse = response;
+
     // If an intent was detected, log it out to the console.
     if (response.intents.length > 0) {
       console.log('Detected intent: #' + response.intents[0].intent);
