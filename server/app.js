@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+const bodyParser = require('body-parser');
+
 var watson = {
   workspaceId: 'ac44799b-f7cb-414b-8cb7-ea9d4544b633',
   username: 'abb8d35f-6b22-465d-ad1b-24d846a4edee',
@@ -7,6 +9,7 @@ var watson = {
 }
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 
+app.use(bodyParser.json({limit: '500mb'}));
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -32,7 +35,8 @@ var workspace_id = watson.workspaceId; // replace with workspace ID
 
 
 app.post('/', function (req, res) {
-  const message = req.body;
+  const message = req.body.message;
+
   const watsonReq = {
     workspace_id: workspace_id,
     input: { text: message },
