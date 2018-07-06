@@ -37,10 +37,28 @@ export class AppComponent implements OnInit{
   }
 
   async sendMessage(text) {
+    this.conversation.push({
+      text: text,
+      date: new Date(),
+      user: {
+        id: 1,
+        imageUrl: 'https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_960_720.png',
+        name: 'Rubén'
+      }
+    })
     try {
      const response = await this.watsonHttpService.sendMessage(text).toPromise();
-     const message = this.parseWatsonResponse(response);
-     this.conversation.push(message);
+     //const message = this.parseWatsonResponse(response);
+     console.log(response)
+     this.conversation.push({
+      text: response.text,
+      date: new Date(),
+      user: {
+        id: 2,
+        imageUrl: '/assets/images/ibm-watson.jpg',
+        name: 'Bot'
+      }
+    });
     } catch (error) {
       console.log(error);
     }
