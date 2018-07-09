@@ -21,4 +21,9 @@ export class WatsonHttpService {
        return this.httpClient.post(`http://localhost:3000`, {message: message}, this.httpOptions);
     }
 
+    start() {
+            return this.httpClient.post(`http://localhost:3000/start`, null, this.httpOptions);
+         
+    }
+
 }

@@ -3,14 +3,14 @@ var app = express();
 const bodyParser = require('body-parser');
 
 var watson = {
-  workspaceId: 'ac44799b-f7cb-414b-8cb7-ea9d4544b633',
+  workspaceId: 'b969b3b3-fc7d-48d5-b3ed-ad484cdb8cd4',
   username: 'abb8d35f-6b22-465d-ad1b-24d846a4edee',
   password: '1uGpthCBy3mD'
 }
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 
-app.use(bodyParser.json({limit: '500mb'}));
-app.use(function(req, res, next) {
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
@@ -31,43 +31,70 @@ var workspace_id = watson.workspaceId; // replace with workspace ID
 }, processResponse);
  */
 
- var lastResponse;
+let lastResponseContext;
 
-
-app.post('/', function (req, res) {
-  const message = req.body.message;
-
-  const watsonReq = {
-    workspace_id: workspace_id,
-    input: { text: message },
-  };
-
-  if (lastResponse) {
-    watsonReq['context'] = lastResponse.context
-  }
-
-  service.message(watsonReq, function (err, response) {
+app.post('/start', function (req, res) {
+  service.message({
+    workspace_id: workspace_id
+  }, function (err, response) {
     if (err) {
- //     console.error(err); // something went wrong
+      //     console.error(err); // something went wrong
       return res.send(err);
     }
-    
-    lastResponse = response;
+
+    lastResponseContext = response.context;
 
     // If an intent was detected, log it out to the console.
     if (response.intents.length > 0) {
       console.log('Detected intent: #' + response.intents[0].intent);
     }
-  
+
     // Display the output from dialog, if any.
     if (response.output.text.length != 0) {
       console.log(response.output.text[0]);
-      return res.send({text: response.output.text[0]})
+      return res.send({ text: response.output.text[0] })
     }
-  
+
+  });
+});
+
+
+app.post('/', function (req, res) {
+  const message = req.body.message;
+  console.log(message)
+  const watsonReq = {
+    workspace_id: workspace_id,
+    input: { text: message },
+  };
+
+  watsonReq['context'] = lastResponseContext
+
+
+  service.message(watsonReq, function (err, response) {
+    if (err) {
+      //     console.error(err); // something went wrong
+      return res.send(err);
+    }
+
+    lastResponseContext = response.context;
+
+    // If an intent was detected, log it out to the console.
+    if (response.intents.length > 0) {
+      console.log('Detected intent: #' + response.intents[0].intent);
+    }
+
+    // Display the output from dialog, if any.
+    if (response.output.text.length != 0) {
+      console.log(response.output.text[0]);
+      return res.send({ text: response.output.text[0] })
+    }
+
   })
 });
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
+
+function processResponse() {
+}

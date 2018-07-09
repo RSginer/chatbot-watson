@@ -14,17 +14,7 @@ import { WatsonHttpService } from './watson-http-service';
 export class AppComponent implements OnInit{
 
   currentUserId = 1;
-  conversation = [
-    {
-      text: 'Hola! ¿Cómo puedo ayudarte?',
-      date: new Date(),
-      user: {
-        id: 2,
-        imageUrl: '/assets/images/ibm-watson.jpg',
-        name: 'Bot'
-      }
-    }
-  ];
+  conversation = [];
 
   constructor(
     private watsonHttpService: WatsonHttpService
@@ -33,7 +23,19 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
-    
+    this.watsonHttpService.start().toPromise().then((res: any) => {
+      this.conversation.push(
+        {
+          text: res.text,
+          date: new Date(),
+          user: {
+            id: 2,
+            imageUrl: '/assets/images/ibm-watson.jpg',
+            name: 'Bot'
+          }
+        }
+      )
+    })
   }
 
   async sendMessage(text) {
