@@ -3,9 +3,9 @@ var app = express();
 const bodyParser = require('body-parser');
 
 var watson = {
-  workspaceId: 'b969b3b3-fc7d-48d5-b3ed-ad484cdb8cd4',
-  username: 'abb8d35f-6b22-465d-ad1b-24d846a4edee',
-  password: '1uGpthCBy3mD'
+  workspaceId: process.env.WATSON_WORKSPACE,
+  username: process.env.WATSON_USERNAME,
+  password: process.env.WATSON_PASSWORD
 }
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 
